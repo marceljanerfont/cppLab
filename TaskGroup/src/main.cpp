@@ -111,8 +111,7 @@ TEST(TaskGroup, many_tasks_some_with_others_without_time) {
     EXPECT_EQ(total, NUM_TASKS_OK + NUM_TASKS_KO);
 }
 
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }
