@@ -19,7 +19,6 @@ pplx::task<void> my_task(int millis, const pplx::cancellation_token_source& cts)
         int sleep_slice = 500;
         int iters = millis/sleep_slice;
         while (++j < iters) {
-            LOGGER << " * ";
             std::this_thread::sleep_for(std::chrono::milliseconds(sleep_slice));
             // cheack if it is canceled
             if (cts.get_token().is_canceled()) {
