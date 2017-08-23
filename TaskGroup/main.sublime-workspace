@@ -1,0 +1,883 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"com",
+				"consumer\tmodule"
+			],
+			[
+				"amqp",
+				"amqp_username\tstatement"
+			],
+			[
+				"migr",
+				"migration_calls\tstatement"
+			],
+			[
+				"scr",
+				"script_version\tstatement"
+			],
+			[
+				"asser",
+				"assertTrue\tfunction"
+			],
+			[
+				"ex",
+				"except"
+			],
+			[
+				"exc",
+				"exclusive\tparam"
+			],
+			[
+				"up",
+				"_upload_video\tfunction"
+			],
+			[
+				"U",
+				"UPLOAD\tstatement"
+			],
+			[
+				"logger",
+				"logger_names\tstatement"
+			],
+			[
+				"upload",
+				"upload_data\tparam"
+			],
+			[
+				"prod",
+				"production\tstatement"
+			],
+			[
+				"uploa",
+				"upload_data\tstatement"
+			],
+			[
+				"production",
+				"productions"
+			],
+			[
+				"pro",
+				"producer_id"
+			],
+			[
+				"se",
+				"segment_id\tstatement"
+			],
+			[
+				"fil",
+				"filepath\tstatement"
+			],
+			[
+				"segm",
+				"segment_id\tstatement"
+			],
+			[
+				"HU",
+				"HUDL_URL\tstatement"
+			],
+			[
+				"file",
+				"file_extension\tstatement"
+			],
+			[
+				"event",
+				"event_id\tstatement"
+			],
+			[
+				"user",
+				"user_id\tstatement"
+			],
+			[
+				"coo",
+				"cookie_ident\tstatement"
+			],
+			[
+				"c",
+				"cookies\tstatement"
+			],
+			[
+				"eve",
+				"evet_id"
+			],
+			[
+				"t",
+				"text\tfunction"
+			],
+			[
+				"sta",
+				"status_code\tstatement"
+			],
+			[
+				"UR",
+				"HUDL_URL"
+			],
+			[
+				"TEA",
+				"TEAM_AWAY\tstatement"
+			],
+			[
+				"sea",
+				"season_id\tstatement"
+			],
+			[
+				"team",
+				"team_id\tstatement"
+			],
+			[
+				"error",
+				"error_str"
+			],
+			[
+				"s",
+				"season\tstatement"
+			],
+			[
+				"te",
+				"team_name\tstatement"
+			],
+			[
+				"p",
+				"parse_url\tfunction"
+			],
+			[
+				"no",
+				"no_ack\tstatement"
+			],
+			[
+				"at",
+				"atvlib"
+			],
+			[
+				"sche",
+				"scheduler_id\tstatement"
+			],
+			[
+				"sch",
+				"schedule_id\tstatement"
+			],
+			[
+				"all",
+				"allowed"
+			],
+			[
+				"swagger",
+				"swagger_param_body\tfunction"
+			],
+			[
+				"is",
+				"is_resource\tparam"
+			],
+			[
+				"flas",
+				"flask_documentation\tfunction"
+			],
+			[
+				"fie",
+				"field_def\tstatement"
+			],
+			[
+				"jso",
+				"json_api_ref\tstatement"
+			],
+			[
+				"APIK",
+				"API_KEY\tstatement"
+			],
+			[
+				"_validate_se",
+				"_validate_security_basic"
+			],
+			[
+				"S",
+				"SECURITY_DEFINITIONS\tstatement"
+			],
+			[
+				"vali",
+				"validate_security_definitions\tfunction"
+			],
+			[
+				"re",
+				"response\tstatement"
+			],
+			[
+				"fr",
+				"format\tfunction"
+			],
+			[
+				"le",
+				"length_bytes\tparam"
+			],
+			[
+				"a",
+				"amqp_host\tstatement"
+			],
+			[
+				"use",
+				"use_config\tparam"
+			],
+			[
+				"duration",
+				"duration_sec"
+			],
+			[
+				"j",
+				"job_worker_thread_"
+			],
+			[
+				"add",
+				"add_request"
+			],
+			[
+				"stat",
+				"update_status"
+			],
+			[
+				"pat",
+				"patch_oper\tstatement"
+			],
+			[
+				"name",
+				"namedtuple\tfunction"
+			],
+			[
+				"ud",
+				"updater\tstatement"
+			],
+			[
+				"producer",
+				"producer_name\tstatement"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "main.sublime-project",
+			"settings":
+			{
+				"buffer_size": 853,
+				"encoding": "UTF-8",
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/46235750T/AppData/Roaming/Sublime Text 3/Packages/User/Visual C++.sublime-build",
+			"settings":
+			{
+				"buffer_size": 1165,
+				"encoding": "UTF-8",
+				"line_ending": "Windows",
+				"name": "untitled.sublime-build"
+			}
+		},
+		{
+			"file": "src/main.cpp",
+			"settings":
+			{
+				"buffer_size": 3311,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 219.0,
+		"last_filter": "insta",
+		"selected_items":
+		[
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			],
+			[
+				"intall",
+				"Package Control: Install Package"
+			],
+			[
+				"json",
+				"Set Syntax: JSON"
+			],
+			[
+				"packa",
+				"Package Control: Remove Package"
+			],
+			[
+				"refre",
+				"Enable Autorefresh"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"PAC",
+				"Package Control: Install Package"
+			],
+			[
+				"auto",
+				"Anaconda: Autoformat PEP8 Errors"
+			]
+		],
+		"width": 432.0
+	},
+	"console":
+	{
+		"height": 189.0,
+		"history":
+		[
+			"exit",
+			"quit",
+			"sys.version",
+			"import sys",
+			"quit()",
+			"Running python2 -u C:\\PROJECTS\\Hudl\\hudl_worker.py",
+			"print(\"hola\")",
+			"cd C:\\PROJECTS",
+			"python"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/C/repos/cppLab/TaskGroup",
+		"/C/repos/cppLab/TaskGroup/src"
+	],
+	"file_history":
+	[
+		"/C/repos/amqppy/examples/01_topic_publisher.py",
+		"/C/AutomaticTV/logs/pa_worker_service.log",
+		"/C/repos/prodauto/PAEngine/utils/TaskGroup.h",
+		"/C/repos/prodauto/PAEngine/utils/TaskGroup.cpp",
+		"/C/repos/amqppy/amqppy/consumer.py",
+		"/C/repos/amqppy/amqppy/publisher.py",
+		"/C/repos/amqppy/test/acceptance/test_publisher.py",
+		"/C/repos/amqppy/test/acceptance/test_consumer.py",
+		"/C/repos/amqppy/test/unit/test_utils.py",
+		"/C/repos/amqppy/amqppy/utils.py",
+		"/C/repos/kamma/kamma/app.py",
+		"/C/repos/kamma/kamma/task.py",
+		"/C/repos/kamma/examples/example.py",
+		"/C/repos/kamma/kamma/__init__.py",
+		"/C/repos/amqppy/README.rst",
+		"/C/repos/kamma/README.rst",
+		"/C/PROJECTS/Planner/hosts_bug.py",
+		"/C/repos/atvcontrol/PACenter/services/atv_rest/rest_planner.py",
+		"/C/repos/lib_atvlib/atvlib/atvlib/pac_utils.py",
+		"/C/repos/lib_atvlib/atvlib/setup.py",
+		"/C/repos/prodauto/PAEngine/CMakeLists.txt",
+		"/C/repos/atvcontrol/deploy/ansible/roles/rabbitmq/tasks/main.yml",
+		"/C/repos/atvcontrol/deploy/ansible/roles/rabbitmq/defaults/main.yml",
+		"/C/repos/atvcontrol/PACenter/dockers/rabbitmq/init_users.sh",
+		"/C/Users/46235750T/Documents/front-end-setup.md",
+		"/C/AutomaticTV/log4cplus.properties",
+		"/C/PROJECTS/Producer/closing crash/logs/pagui.log",
+		"/C/PROJECTS/Producer/crash_2_10.md",
+		"/C/AutomaticTV/PAWorkerService/worker_config.py",
+		"/C/repos/internal/projectes/hudl_championship/src/_REMOVE_SERVICE.BAT",
+		"/C/repos/internal/projectes/hudl_championship/src/_INSTALL_SERVICE.BAT",
+		"/C/AutomaticTV/PAWorkerService/pa_server.py",
+		"/C/repos/internal/projectes/hudl_championship/logs/hudl_service.log",
+		"/C/AutomaticTV/PAWorkerService/worker.py",
+		"/C/repos/prodauto/PAWorker/pa_server.py",
+		"/C/repos/internal/projectes/hudl_championship/src/requirements.txt",
+		"/C/repos/internal/projectes/hudl_championship/src/__init__.py",
+		"/C/repos/internal/projectes/hudl_championship/src/uploader.py",
+		"/C/repos/internal/projectes/hudl_championship/src/fqueue.py",
+		"/C/repos/internal/projectes/hudl_championship/src/hudl.py",
+		"/C/repos/prodauto/PAWorker/worker.py",
+		"/C/repos/prodauto/PAWorker/status_updater.py",
+		"/C/PROJECTS/Hudl/rabbitmq_permissions.txt",
+		"/C/AutomaticTV/logs/paserver.log",
+		"/C/AutomaticTV/data/conf/pa_worker.ini",
+		"/C/Users/46235750T/AppData/Roaming/Sublime Text 3/Packages/User/Anaconda.sublime-settings",
+		"/C/Users/46235750T/AppData/Roaming/Sublime Text 3/Packages/User/python2.sublime-build",
+		"/C/_python/regex2.py",
+		"/C/Program Files/Sublime Text 3/Packages/Python.sublime-package",
+		"/C/repos/amqppy/examples/topic_consumer.py",
+		"/C/repos/amqpcpp/src/CMakeLists.txt",
+		"/C/proto/amqpcpp-master/README",
+		"/C/repos/amqpcpp/build/CMakeFiles/CMakeOutput.log",
+		"/D/atvrecordings/Marcel/Football/2017-05-22-15-40-25_Football11_soccer__Standart/metadata.json",
+		"/C/repos/prodauto/PALogS/CMakeLists.txt",
+		"/C/proto/rabbitmq-c-0.8.0/configure",
+		"//10.17.148.240/MetaSAN/AutomaticTV_Temp/Build-VC-64-debug/include/openssl/opensslv.h",
+		"/C/repos/automatictv/docs/api_reference/source/rest.rst",
+		"/C/repos/automatictv/docs/api_reference/source/index.rst",
+		"/C/repos/prodauto/deploy/encryption/PANode_SafeNet_License.prjx",
+		"/C/AutomaticTV/logs/worker.log",
+		"/C/Users/46235750T/AppData/Roaming/Sublime Text 3/Packages/OmniMarkupPreviewer/Default (Windows).sublime-keymap",
+		"/C/Users/46235750T/AppData/Roaming/Sublime Text 3/Packages/OmniMarkupPreviewer/OmniMarkupPreviewer.sublime-settings",
+		"/C/Users/46235750T/AppData/Roaming/Sublime Text 3/Packages/Markdown Preview/MarkdownPreview.sublime-settings",
+		"/C/Users/46235750T/Downloads/objects.inv",
+		"/C/AutomaticTV/PAWorkerService/name.dat",
+		"/C/AutomaticTV/PAWorkerService/name - Copy.dat",
+		"/C/CMakeProjects/bin/Debug/logs/paserver.log",
+		"/C/repos/myLab/cpp/katas/tape_equilibrium/README.md",
+		"/E/BACKUP_MAQUINA_2017_01/_python_run/tests/_test_rest_atv - copia.py",
+		"/E/BACKUP_MAQUINA_2017_01/_python_run/tests/test_one.py",
+		"/C/PROJECTS/amqppy/amqppy.zip",
+		"/E/BACKUP_MAQUINA_2017_01/PROJECTES/AU/Coding/code1/mediaware.h",
+		"/E/BACKUP_MAQUINA_2017_01/PROJECTES/AU/Coding/code1/TapeEquilibrium.h",
+		"/C/PROJECTS/amqppy/amqp_publisher.py",
+		"/C/PROJECTS/Producer/profile/patch_file.patch",
+		"/C/PROJECTS/amqppy/__init__.py",
+		"/C/PROJECTS/amqppy/amqp_consumer.py",
+		"/C/repo_pro/atvcontrol/PACenter/production_broker/register.py",
+		"/C/PROJECTS/Producer/profile/sf_small_distance__sf_small_distance_bad_cond.dif",
+		"/C/PROJECTS/Producer/profile/to_patch/bad_cond__small_dist.patch",
+		"/C/PROJECTS/Producer/profile/to_patch/football(soccer)_11_scouting_feed_small_distance_bad_conditions.xml",
+		"/C/PROJECTS/amqppy/amqp_utils.py",
+		"/C/repos/prodauto/PAWorker/worker_config.py",
+		"/C/repos/lib_atvlib/atvlib/atvlib/rest/assets.py",
+		"/C/repos/atvcontrol/PACenter/services/celery_scheduler/scheduler_worker.py",
+		"/C/_python/times.py",
+		"/C/CMakeProjects/bin/Debug/PAWorkerService/delete.py",
+		"/C/repos/atvmanager/PAControl/services/atv_rest/migrations/001001000_001002000.py",
+		"/C/repos/atvcontrol/PACenter/etc/default.conf",
+		"/C/repos/atvcontrol/PACenter/services/atv_rest/atv_rest.py",
+		"/C/repos/atvcontrol/PACenter/services/productions_agent/productions_agent.py",
+		"/C/Users/46235750T/AppData/Roaming/Skype/My Skype Received Files/worker.log",
+		"/C/PROJECTS/Producer/crashes/logs_pete_DATETIME_TS/pagui.log",
+		"/C/repos/atvcontrol/PACenter/services/manager_sync/manager_sync.py",
+		"/C/repos/atvcontrol/PACenter/services/atv_rest/rest_assets.py",
+		"/C/repos/lib_atvlib/atvlib/atvlib/amqp/amqp_consumer.py",
+		"/C/repos/lib_atvlib/atvlib/atvlib/amqp/amqp_publisher.py",
+		"/C/repos/atvmanager/PAControl/etc/default.conf",
+		"/C/repos/atvmanager/PAControl/etc/automatictv.conf",
+		"/C/repos/atvcontrol/PACenter/services/sftp-config.json",
+		"/C/repos/prodauto/tests/lettuce_tests/_lettuce_utils/scripts/config_terrain.py",
+		"/C/repos/prodauto/tests/lettuce_tests/backend_test/features/short_duration.feature",
+		"/C/repos/prodauto/tests/lettuce_tests/backend_test/features/schedule_production_daily.feature",
+		"/C/repos/prodauto/tests/lettuce_tests/_lettuce_utils/scripts/backend.py",
+		"/C/repos/automatictv/docs/api_reference/source/amqp.rst",
+		"/C/repos/atvcontrol/PACenter/services/atv_rest/rest_utils.py",
+		"/C/repos/lib_atvlib/atvlib/atvlib/amqp/amqp_utils.py",
+		"/C/repos/lib_atvlib/atvlib/atvlib/utils.py",
+		"/C/repos/eve-swagger/eve_swagger/objects.py",
+		"/C/CMakeProjects/bin/Debug/data/conf/pa_worker.ini",
+		"/C/repos/eve-swagger/eve_swagger/tests/todelete.py",
+		"/C/repos/atvcontrol/PACenter/services/atv_rest/rest_idm.py",
+		"/C/repos/eve-swagger/eve_swagger/swagger.py",
+		"/C/repos/atvcontrol/.git/hooks/pre-commit",
+		"/C/repos/lib_atvlib/atvlib/atvlib/rest/api.py",
+		"/C/repos/atvcontrol/PACenter/services/atv_rest/settings.py",
+		"/C/repos/eve-swagger/eve_swagger/tests/__init__.py",
+		"/C/repos/eve-swagger/eve_swagger/tests/test_settings.py",
+		"/C/repos/eve-swagger/eve_swagger/__init__.py",
+		"/C/repos/eve-swagger/eve_swagger/paths.py",
+		"/C/repos/eve-swagger/eve_swagger/validation.py",
+		"/C/repos/atvcontrol/PACenter/services/atv_rest/atvsecurity/exceptions.py",
+		"/C/_python/validation.py",
+		"/C/repos/atvcontrol/PACenter/services/atv_rest/atvsecurity/token_auth.py",
+		"/C/Users/46235750T/Documents/shit.py",
+		"/C/Python27/lib/site-packages/cerberus/cerberus.py",
+		"/C/repos/atvcontrol/PACenter/services/atv_rest/atv_exceptions.py"
+	],
+	"find":
+	{
+		"height": 22.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+			"C:\\repos\\atvmanager",
+			"C:\\repos\\atvcontrol\\PACenter",
+			"C:\\repos\\lib_atvlib\\atvlib",
+			"C:\\repos\\prodauto",
+			"C:\\repos\\atvcontrol\\PACenter\\services",
+			"C:\\repos\\atvmanager\\PAControl",
+			"C:\\repos\\atvcontrol,C:\\repos\\lib_atvlib",
+			"C:\\repos",
+			"C:\\repos\\atvcontrol\\PACenter\\services",
+			"C:\\repos\\prodauto\\tests\\lettuce_tests\\_lettuce_utils",
+			"C:\\repos\\prodauto\\tests\\lettuce_tests",
+			"C:\\repos\\prodauto\\tests\\lettuce_tests\\_lettuce_utils\\scripts",
+			"C:\\repos\\prodauto",
+			"C:\\repos\\atvcontrol\\PACenter",
+			"C:\\repos\\eve-swagger",
+			"C:\\repos",
+			"C:\\repos\\eve-swagger\\eve_swagger",
+			"C:\\repos\\atvcontrol\\PACenter",
+			"C:\\repos\\atvcontrol",
+			"C:\\repos\\atvlib",
+			"C:\\repos\\atvcontrol\\PACenter",
+			"C:\\repos\\atvcontrol\\PACenter\\services\\atv_rest",
+			"C:\\repos\\prodauto\\PAGUI\\dialogs\\preferences",
+			"C:\\repos\\atvcontrol",
+			"E:\\BACKUP_MAQUINA_2017_01\\proto\\IPTransfer",
+			"E:\\BACKUP_MAQUINA_2017_01\\proto\\IPTransfer\\IPTransfer\\ump",
+			"C:\\repos\\ffmpeg"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"broker='amqp://guest:guest@localhost:5672//'",
+			"Kamma",
+			"utils",
+			"task.",
+			"TaskCallback",
+			"Task",
+			"task",
+			"Task",
+			"requests",
+			"subprocess",
+			"hw_hash",
+			"producer_id",
+			"self.parser",
+			"ConfigParser",
+			"threading",
+			"replace_hostname",
+			"set_planner_hostname",
+			"UPDATE_INTERVAL",
+			"add_defini",
+			"HUDL_TASK",
+			"ConfigParser",
+			"producer_id",
+			"from_version",
+			"Audio _start in elapsed",
+			"PAAudioSource::watcher_cycle[164] watcher cycl",
+			"got first audio PTS",
+			"AudioSource",
+			"Audio",
+			"AudioSource  Started",
+			"_watcher",
+			"SDL Quit",
+			"Starting Rev#2",
+			"Heartbeat",
+			"Starting Rev#",
+			"ffmpeg deinited",
+			"Succees in heartbeat",
+			"GENICAM EXCEPTION",
+			"Destructor GENICAM EXCEPTION",
+			" - Starting Rev#2.10.0",
+			"Shutting down AutomaticTV.. [Code:0]",
+			"- Starting Rev",
+			"RotatingFileHandler",
+			"stop()",
+			"TODO",
+			"production_id",
+			"event_type",
+			"team_away_name",
+			"event_type",
+			"event_date_uploaded",
+			"event_date_played",
+			"event_name",
+			"8601",
+			"iso_8601",
+			"productions",
+			"TODO",
+			"fifo",
+			"python",
+			"9419940",
+			"\"%Y-%m-%d %H:%M:%SZ\"",
+			"include_directories",
+			"update_deps_file",
+			"source",
+			"sources",
+			"BUILD_STATIC_LIBS",
+			"add_",
+			"CMAKE_SOURCE",
+			"add_",
+			"add_subdirectory",
+			"add_library",
+			"CMAKE_BUILD_TYPE",
+			"if(",
+			"requires_private",
+			"Debug",
+			"cpprestsdk.2.4.0.1",
+			"OpenCV",
+			"Casablanca",
+			"ceres",
+			"BOOST",
+			"SSL",
+			"include",
+			"AUTOMATICTV_SOURCE_DIR",
+			"lib",
+			"static",
+			"satic",
+			"add_",
+			"target",
+			"openssl",
+			"Zi",
+			"version",
+			"release",
+			"unicode",
+			"graphics",
+			"Stop button pushed",
+			"STOP",
+			"PAProcessorAnalyzer2DOptFlow processor Stopped",
+			"Stopped muxer Output",
+			"PAProcessorEncoder Worker Thread Finish",
+			"PAENGINE Workflow stopped",
+			"SDL Quitting",
+			"Stopped muxer Output",
+			"PAProcessorEncoder Worker Thread Finish",
+			"Starting Rev#2.10.0-",
+			"[rtmp://",
+			"rtmp",
+			"utils",
+			"?P",
+			"producer_name",
+			"NAME_FILENAME",
+			"CFG_PA_SERVER_CWD",
+			"config",
+			"NAME_FILENAME",
+			"datetime",
+			"self.status",
+			"update_after_close_job_status",
+			"self.status",
+			"STOPPING",
+			"self.mutex",
+			"_is_job_running",
+			"self.mutex",
+			"merge_two_dicts",
+			"__exec_start_production",
+			"__create_production",
+			"default",
+			"HLS_EDGE",
+			"hls_edge",
+			"traceback",
+			"DOWNSTREAM_LICENSES_ROUTING_KEY",
+			"transfer_custom_attributes"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"BROKER",
+			"Worker",
+			"kamma.",
+			"Z7",
+			"Authentication",
+			"\"produces\": [\"application/json\"],",
+			"10.17.148.220",
+			"false",
+			"null",
+			"\"",
+			"'"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": true,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "main.sublime-project",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 853,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								650,
+								787
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/C/Users/46235750T/AppData/Roaming/Sublime Text 3/Packages/User/Visual C++.sublime-build",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1165,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1165,
+								1165
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/main.cpp",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3311,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								797,
+								797
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/C++/C++.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 22.0
+	},
+	"input":
+	{
+		"height": 30.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 304.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.sftp":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "CMake_clean_build_run",
+	"project": "main.sublime-project",
+	"replace":
+	{
+		"height": 40.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 665.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 427.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
