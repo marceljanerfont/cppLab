@@ -21,19 +21,30 @@ Problems: https://codility.com/programmers/lessons/
 
 ### Install googletest libraries:
 * go to a folder where to download de source code. eg: gtest
-
-        cd gtest
-        git clone https://github.com/google/googletest.git
-       
+```
+    cd gtest
+    git clone https://github.com/google/googletest.git
+```
 * build googletest
+```
+    cd googletest
+    mkdir install
+    cd install
+```
+only for windows:
+```
+   cmake -G "Visual Studio 11 2012 Win64" ../ 
+   cmake --build . --config Debug --clean-first
+   cmake --build . --config Release --clean-first
+---------------
 
-        cd googletest
-        mkdir install
-        cd install
-        cmake -DCMAKE_CXX_COMPILER="c++" -DCMAKE_CXX_FLAGS="-std=c++11 -stdlib=libc++" ../ 
-        make
-        sudo make install
-
+```
+other:
+```
+    cmake -DCMAKE_CXX_COMPILER="c++" -DCMAKE_CXX_FLAGS="-std=c++11 -stdlib=libc++" ../ 
+    make
+    sudo make install
+```
 * in Mac the library would be located at: /usr/local/include/gtest
 * Do the same to build **googlemoc**
 
