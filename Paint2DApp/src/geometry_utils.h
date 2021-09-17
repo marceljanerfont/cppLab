@@ -21,6 +21,6 @@ struct Range {
 
 /* Ramer-Douglas-Peucker algorithm for polygon simplification */
 // dst_contour should be already allocated
-void approxPolyDP(const Point *src_contour, const int &src_count, Point *dst_contour, int *dst_count, const double &epsilon);
+void approxPolyDP(const Point *src_contour, const int &src_count, Point *dst_contour, int &dst_count, const double &epsilon);
 }
 #endif // GEOMETRY_UTILS_H

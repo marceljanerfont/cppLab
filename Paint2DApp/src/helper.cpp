@@ -147,23 +147,21 @@ void Helper::loadSegmentation() {
         region.valid = true;
         QVector<QPoint> qContour;
 
-        bool is_closed = contour.begin() == contour.end();
-        // no simplify contour
+        ////// do not simplify contours //////
         //for (auto cvPoint : contour) {
         //  qContour.push_back(QPoint(cvPoint.x * FACTOR, cvPoint.y * FACTOR));
         //}
 
         ////// simplify contours //////
-
-        // with geometry_utils
+        // simplify contour with geometry_utils
         int nbPoints = (int)contour.size();
         gu::Point *guContour = new gu::Point[nbPoints];
         for (int i = 0; i < nbPoints; ++i) {
           guContour[i] = gu::Point(contour[i].x, contour[i].y);
         }
-        int nbPointsSimple;
+        int nbPointsSimple = 0;
         gu::Point *guContourSimple = new gu::Point[nbPoints];
-        gu::approxPolyDP(guContour, nbPoints, guContourSimple, &nbPointsSimple, MAX_DISTANCE_PIXELS);
+        gu::approxPolyDP(guContour, nbPoints, guContourSimple, nbPointsSimple, MAX_DISTANCE_PIXELS);
         for (int i = 0; i < nbPointsSimple; ++i) {
           gu::Point guPoint = guContourSimple[i];
           qContour.push_back(QPoint(guPoint.x * FACTOR, guPoint.y * FACTOR));
@@ -171,15 +169,17 @@ void Helper::loadSegmentation() {
         delete [] guContour;
         delete [] guContourSimple;
 
-
-        //  with opencv
+        // simplify contour with opencv
         //std::vector<cv::Point> contourApprox;
-        //cv::approxPolyDP(contour, contourApprox, MAX_DISTANCE_PIXELS, false);
+        //cv::approxPolyDP(contour, contourApprox, MAX_DISTANCE_PIXELS, true);
         //for (auto cvPoint : contourApprox) {
         //  qContour.push_back(QPoint(cvPoint.x * FACTOR, cvPoint.y * FACTOR));
         //}
 
-        qContour.push_back(*qContour.begin());
+        // need to close?
+        if (qContour.front() != qContour[qContour.size() - 1]) { // vector::back() sometimes points to end()
+          qContour.push_back(qContour.front());
+        }
         region.qContours.push_back(qContour);
       }
     }

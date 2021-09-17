@@ -189,12 +189,12 @@ static int approxPolyDP_(const gu::Point *src_contour, int count0, gu::Point *ds
   return new_count;
 }
 
-void gu::approxPolyDP(const gu::Point *src_contour, const int &src_count, gu::Point *dst_contour, int *dst_count, const double &epsilon) {
+void gu::approxPolyDP(const gu::Point *src_contour, const int &src_count, gu::Point *dst_contour, int &dst_count, const double &epsilon) {
   // prevent unreasonable error values (Douglas-Peucker algorithm) from being used.
   if (epsilon < 0.0 || !(epsilon < 1e30)) {
     assert(false && "Epsilon not valid.");
   }
 
   mu::AutoBuffer<gu::Range> _stack(src_count);
-  *dst_count = approxPolyDP_(src_contour, src_count, dst_contour, false, epsilon, _stack);
+  dst_count = approxPolyDP_(src_contour, src_count, dst_contour, true, epsilon, _stack);
 }
