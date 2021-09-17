@@ -43,19 +43,8 @@ class Helper {
   QColor getRandomColor();
   QBrush background;
 
-
-  QFont textFont;
-  QPen circlePen;
-  QPen textPen;
-
   QPen m_blackPen;
   QPen m_redPen;
-
-  //const size_t IMG_WIDTH{1920 / 4};
-  //const size_t IMG_HEIGHT{1080 / 4};
-
-  //const size_t IMG_WIDTH{1920};
-  //const size_t IMG_HEIGHT{1080};
 
   const int FACTOR{4};
 
@@ -65,7 +54,6 @@ class Helper {
   int m_nbColumns; // = m_width / FACTOR
   int m_nbRows;    // = m_height / FACTOR
 
-  char **m_segmentation2;
   char *m_segmentation;
 
 

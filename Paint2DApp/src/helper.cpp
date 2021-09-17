@@ -9,16 +9,12 @@
 
 #include <opencv2/imgproc.hpp>
 
+#include "geometry_utils.h"
+
 Helper::Helper(const std::string &filename, const int &width, const int &height):
   m_filename(filename), m_width(width), m_height(height), m_nbColumns(width / FACTOR), m_nbRows(height / FACTOR) {
   background = QBrush(QColor(64, 32, 64));
   // allocate
-  //m_segmentation = new char *[m_nbRows];
-  //for (int row = 0; row < m_nbRows; ++row) {
-  //  m_segmentation[row] = new char[m_nbColumns];
-  //  memset(m_segmentation[row], 0, m_nbColumns);
-  //}
-
   m_segmentation = new char [m_nbColumns * m_nbRows];
 
   qsrand(time(0));
@@ -29,23 +25,17 @@ Helper::Helper(const std::string &filename, const int &width, const int &height)
   m_redPen = QPen(Qt::red);
   m_redPen.setWidth(FACTOR);
 
-  for (int i = 0; i < MAX_PENS; ++i) {
-    QColor color(qrand() % 255, qrand() % 255, qrand() % 255);
-    while (color == Qt::black) {
-      color = QColor(qrand() % 255, qrand() % 255, qrand() % 255);
-    }
-    m_pens[i] = QPen(color);
-    m_pens[i].setWidth(FACTOR);
-  }
-
   loadSegmentation();
 }
 Helper::~Helper() {
-  // deallocate
-  //for (int row = 0; row < m_nbRows; ++row) {
-  //  delete [] m_segmentation[row];
-  //}
+
   delete [] m_segmentation;
+
+  for (auto &it : m_regions) {
+    region &region = it.second;
+    delete [] region.mask;
+    region.qContours.clear();
+  }
 }
 
 void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed) {
@@ -65,7 +55,6 @@ void Helper::paint(QPainter *painter, QPaintEvent *event, int elapsed) {
       }
     }
   }
-
 
   // paint contour regions
   for (auto &it : m_regions) {
@@ -131,7 +120,7 @@ void Helper::loadSegmentation() {
           memset(newRegion.mask, 0, m_nbColumns * m_nbRows);
           it = m_regions.insert(std::make_pair(newRegion.id, newRegion)).first;
         }
-        it->second.mask[col + row * m_nbColumns] = 255;
+        it->second.mask[col + row * m_nbColumns] = (char)255;
       }
     }
   }
@@ -144,21 +133,52 @@ void Helper::loadSegmentation() {
     region.penMask = QPen(color);
     region.penMask.setWidth(FACTOR);
 
-    region.penContour = QPen(color.lightness() > 127 ? color.darker(170) : color.lighter(170));
-    region.penContour.setWidth(FACTOR);
+    region.penContour = QPen(color.lightness() > 127 ? color.darker(175) : color.lighter(175));
+    region.penContour.setWidth(FACTOR + 2);
 
     // find contours
     std::vector<std::vector<cv::Point>> contours;
     cv::Mat cvImage(m_nbRows, m_nbColumns, CV_8UC1, region.mask, m_nbColumns);
     cv::findContours(cvImage, contours, cv::RetrievalModes::RETR_EXTERNAL, cv::ContourApproximationModes::CHAIN_APPROX_SIMPLE);
 
+    const double MAX_DISTANCE_PIXELS = 1.5;
     for (auto contour : contours) {
       if (contour.size() >= 3) {
         region.valid = true;
         QVector<QPoint> qContour;
-        for (auto cvPoint : contour) {
-          qContour.push_back(QPoint(cvPoint.x * FACTOR, cvPoint.y * FACTOR));
+
+        bool is_closed = contour.begin() == contour.end();
+        // no simplify contour
+        //for (auto cvPoint : contour) {
+        //  qContour.push_back(QPoint(cvPoint.x * FACTOR, cvPoint.y * FACTOR));
+        //}
+
+        ////// simplify contours //////
+
+        // with geometry_utils
+        int nbPoints = (int)contour.size();
+        gu::Point *guContour = new gu::Point[nbPoints];
+        for (int i = 0; i < nbPoints; ++i) {
+          guContour[i] = gu::Point(contour[i].x, contour[i].y);
         }
+        int nbPointsSimple;
+        gu::Point *guContourSimple = new gu::Point[nbPoints];
+        gu::approxPolyDP(guContour, nbPoints, guContourSimple, &nbPointsSimple, MAX_DISTANCE_PIXELS);
+        for (int i = 0; i < nbPointsSimple; ++i) {
+          gu::Point guPoint = guContourSimple[i];
+          qContour.push_back(QPoint(guPoint.x * FACTOR, guPoint.y * FACTOR));
+        }
+        delete [] guContour;
+        delete [] guContourSimple;
+
+
+        //  with opencv
+        //std::vector<cv::Point> contourApprox;
+        //cv::approxPolyDP(contour, contourApprox, MAX_DISTANCE_PIXELS, false);
+        //for (auto cvPoint : contourApprox) {
+        //  qContour.push_back(QPoint(cvPoint.x * FACTOR, cvPoint.y * FACTOR));
+        //}
+
         qContour.push_back(*qContour.begin());
         region.qContours.push_back(qContour);
       }

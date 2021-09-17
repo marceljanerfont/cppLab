@@ -55,15 +55,14 @@
 
 #include <QWidget>
 
-//! [0]
 class Window : public QWidget {
   Q_OBJECT
 
- public: Window();
+ public:
+  Window();
 
  private:
   Helper m_helper;
 };
-//! [0]
 
 #endif
