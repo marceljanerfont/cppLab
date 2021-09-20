@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <chrono>
 
 #include <QPainter>
 #include <QPaintEvent>
@@ -141,6 +142,9 @@ void Helper::loadSegmentation() {
     cv::Mat cvImage(m_nbRows, m_nbColumns, CV_8UC1, region.mask, m_nbColumns);
     cv::findContours(cvImage, contours, cv::RetrievalModes::RETR_EXTERNAL, cv::ContourApproximationModes::CHAIN_APPROX_SIMPLE);
 
+    double microseconds = 0.0;
+    double nbIterations = 0.0;
+
     const double MAX_DISTANCE_PIXELS = 1.5;
     for (auto contour : contours) {
       if (contour.size() >= 3) {
@@ -161,7 +165,11 @@ void Helper::loadSegmentation() {
         }
         int nbPointsSimple = 0;
         gu::Point *guContourSimple = new gu::Point[nbPoints];
+        std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
         gu::approxPolyDP(guContour, nbPoints, guContourSimple, nbPointsSimple, MAX_DISTANCE_PIXELS);
+        std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+        microseconds += static_cast<double>(std::chrono::duration_cast<std::chrono::microseconds>(end - begin).count());
+        ++nbIterations;
         for (int i = 0; i < nbPointsSimple; ++i) {
           gu::Point guPoint = guContourSimple[i];
           qContour.push_back(QPoint(guPoint.x * FACTOR, guPoint.y * FACTOR));
@@ -182,6 +190,7 @@ void Helper::loadSegmentation() {
         }
         region.qContours.push_back(qContour);
       }
-    }
+    }// end for
+    std::cout << "elapsed average = " << microseconds / nbIterations << " us" << std::endl;
   }
 }
