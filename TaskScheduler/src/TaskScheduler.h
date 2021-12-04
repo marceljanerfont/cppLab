@@ -1,6 +1,63 @@
-#include <boost/asio.hpp>
+
 #include <thread>
 #include <functional>
+#include <map>
+
+#include <boost/asio.hpp>
+
+#include <boost/utility.hpp> // boost::noncopyable
+
+
+class Task: boost::noncopyable {
+  struct Summary {
+    int64_t executed {0};
+    int64_t succeded {0};
+    int64_t failed {0};
+    int64_t cancelled {0};
+  };
+
+ public:
+  Task(boost::asio::deadline_timer timer, std::function<void()> callback);
+  std::string id() {
+    return id_;
+  }
+  Summary report() {
+    return summary;
+  }
+
+ protected:
+  virtual void schedule(const boost::system::error_code &e) = 0;
+
+  boost::asio::deadline_timer timer_;
+  std::function<void()> callback_;
+  std::string id_;
+  int64_t executed_times_{0};
+  Summary summary;
+};
+
+class TimerTask: public Task {
+ public:
+  TimerTask(boost::asio::deadline_timer timer, std::function<void()> callback, const int64_t &microseconds, const int64_t &repetitions);
+
+ private:
+  void schedule(const boost::system::error_code &e) override;
+
+  int64_t repetitions_ {0}; // if (repetitions_ < 1) then repeats for ever
+  int64_t interval_us_ {0};
+  int64_t prev_interval_us_ {0};
+
+  std::chrono::steady_clock::time_point interval_start_;
+};
+
+class CalendarTask: public Task {
+ public:
+  CalendarTask(boost::asio::deadline_timer timer, std::function<void()> callback, const int64_t &microseconds, const std::vector<boost::posix_time::ptime> &repetitions);
+
+ private:
+  void schedule(const boost::system::error_code &e) override;
+
+  std::vector<boost::posix_time::ptime> repetitions_;
+};
 
 class TaskScheduler {
  public:
@@ -12,29 +69,31 @@ class TaskScheduler {
   TaskScheduler(const int &num_threads);
   ~TaskScheduler();
 
-  //void onTimer(const unsigned int &interval_ms, );
 
-  void singleShotTimer(unsigned int milliseconds, std::function<void()> callback);
+  std::string createTimerTask(const int64_t &milliseconds, std::function<void()> callback, const int64_t &repetitions = 0);
 
   size_t terminate();
   void run(); //!< it blocks until is terminated by 'terminate()' invocation
   void asyncRun();
   bool isRunning();
 
- private:
-  void onTimeout(const boost::system::error_code &e);
 
+ private:
   boost::asio::io_context io_ctx_;
   std::thread thread_; //!< asyncRun() thread
   std::atomic_bool running {false};
   std::mutex mutex_;
   size_t executed_handles_nb_ {0};
 
+  std::map<std::string, Task *> tasks_;
+
+
   // future task
   boost::asio::deadline_timer timer_;
   std::function<void()> callback_;
-
-
+  int64_t interval_us_;
+  int64_t prev_interval_us_;
+  std::chrono::steady_clock::time_point interval_start_;
 };
 
 //////////////////////////////////////////////////
