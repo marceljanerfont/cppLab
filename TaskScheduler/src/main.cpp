@@ -87,35 +87,106 @@ struct MyClass {
 //  EXPECT_EQ(executed_nb, 0);
 //}
 
-TEST(TaskScheduler, periodic_shot) {
+
+TEST(TaskScheduler, timer_task_limited) {
   TaskScheduler scheduler(1);
   scheduler.asyncRun();
 
   MyClass theClass("1");
 
-  const int64_t PERIOD_MS = 1'000;
+  const int64_t PERIOD_MS = 500;
   const int64_t ITERATIONS_NB = 10;
 
   // binding a function
-  //scheduler.periodicShotTimer(PERIOD_MS, std::bind(&MyClass::printMsg, &theClass, "hello!"));
+  //std::string task_id = scheduler.createTimerTask(PERIOD_MS, std::bind(&MyClass::printMsg, &theClass, "hello!"));
+
+  // with lambda
+  std::string task_id = scheduler.createTimerTask(PERIOD_MS, [&theClass]() {
+    theClass.printMsg("hello!");
+  }, ITERATIONS_NB);
+
+  std::this_thread::sleep_for(std::chrono::milliseconds(ITERATIONS_NB * PERIOD_MS + PERIOD_MS / 2));
+  Task::Summary summary = scheduler.summaryTask(task_id);
+  int64_t executed_nb = scheduler.terminate();
+  EXPECT_EQ(summary.executed, executed_nb);
+
+  EXPECT_EQ(scheduler.isRunning(), false);
+
+  const int64_t tolerance = 0;
+  std::cout << "Executed " << summary.executed << " of " << ITERATIONS_NB << ", tolerance: " << tolerance << std::endl;
+
+  EXPECT_LE(summary.executed, ITERATIONS_NB + tolerance);
+  EXPECT_GE(summary.executed, ITERATIONS_NB - tolerance);
+}
+
+TEST(TaskScheduler, timer_task_infinite) {
+  TaskScheduler scheduler(1);
+  scheduler.asyncRun();
+
+  MyClass theClass("1");
+
+  const int64_t PERIOD_MS = 500;
+  const int64_t ITERATIONS_NB = 10;
+
+  // binding a function
+  //std::string task_id = scheduler.createTimerTask(PERIOD_MS, std::bind(&MyClass::printMsg, &theClass, "hello!"));
 
   // with lambda
   std::string task_id = scheduler.createTimerTask(PERIOD_MS, [&theClass]() {
     theClass.printMsg("hello!");
   });
 
-  std::this_thread::sleep_for(std::chrono::milliseconds(ITERATIONS_NB * PERIOD_MS));
-  size_t executed_nb = scheduler.terminate();
+  std::this_thread::sleep_for(std::chrono::milliseconds(ITERATIONS_NB * PERIOD_MS + PERIOD_MS / 2));
+  Task::Summary summary = scheduler.summaryTask(task_id);
+  int64_t executed_nb = scheduler.terminate();
+  EXPECT_EQ(summary.executed, executed_nb);
+
   EXPECT_EQ(scheduler.isRunning(), false);
 
   const int64_t tolerance =  std::max(1LL, ITERATIONS_NB / 10LL); // 10% of deviation
-  std::cout << "Executed " << executed_nb << " of " << ITERATIONS_NB << ", tolerance: " << tolerance << std::endl;
+  std::cout << "Executed " << summary.executed << " of " << ITERATIONS_NB << ", tolerance: " << tolerance << std::endl;
 
-  EXPECT_LE(executed_nb, ITERATIONS_NB + tolerance);
-  EXPECT_GE(executed_nb, ITERATIONS_NB - tolerance);
+  EXPECT_LE(summary.executed, ITERATIONS_NB + tolerance);
+  EXPECT_GE(summary.executed, ITERATIONS_NB - tolerance);
+}
+
+TEST(TaskScheduler, cancel_timer_task_limited) {
+  TaskScheduler scheduler(1);
+  scheduler.asyncRun();
+
+  MyClass theClass("1");
+
+  const int64_t PERIOD_MS = 500;
+  const int64_t ITERATIONS_NB = 10;
+  const int64_t ITERATIONS_DONE_NB = ITERATIONS_NB / 2;
+
+  // binding a function
+  //std::string task_id = scheduler.createTimerTask(PERIOD_MS, std::bind(&MyClass::printMsg, &theClass, "hello!"));
+
+  // with lambda
+  std::string task_id = scheduler.createTimerTask(PERIOD_MS, [&theClass]() {
+    theClass.printMsg("hello!");
+  }, ITERATIONS_NB);
+
+  std::this_thread::sleep_for(std::chrono::milliseconds(ITERATIONS_DONE_NB * PERIOD_MS));
+  Task::Summary summary = scheduler.terminateTask(task_id);
+  std::this_thread::sleep_for(std::chrono::milliseconds(ITERATIONS_DONE_NB * PERIOD_MS + PERIOD_MS / 2));
+  int64_t executed_nb = scheduler.terminate();
+  Task::Summary summary_post = scheduler.summaryTask(task_id);
+
+  std::cout << "Executed " << summary_post.executed << " of " << ITERATIONS_NB << ", cancelled: " << summary_post.cancelled << std::endl;
+
+  EXPECT_EQ(summary.executed, summary_post.executed);
+  EXPECT_EQ(summary.cancelled, summary_post.cancelled);
+
+  const int64_t tolerance =  std::max(1LL, ITERATIONS_NB / 10LL); // 10% of deviation
+
+  EXPECT_LE(summary_post.executed, ITERATIONS_DONE_NB + tolerance);
+  EXPECT_GE(summary_post.executed, ITERATIONS_DONE_NB - tolerance);
 }
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
+  //::testing::GTEST_FLAG(filter) = "TaskScheduler.cancel_timer_task_limited";
   return RUN_ALL_TESTS();
 }
