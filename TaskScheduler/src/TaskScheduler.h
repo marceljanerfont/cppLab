@@ -2,51 +2,39 @@
 #include <thread>
 #include <functional>
 #include <map>
+#include <queue>
 
 #include <boost/asio.hpp>
-
 #include <boost/utility.hpp> // boost::noncopyable
 
-
+/**
+* @brief Task is the assset of task scheduler (TaskScheduler). It is a base class.
+* It wraps the task's callback, id, and a summary of the execution report.
+*/
 class Task: boost::noncopyable {
  public:
-
+  /**
+  * @brief Summary execution report of the task
+  */
   struct Summary {
-    //std::atomic_int64_t executed {0};
-    //std::atomic_int64_t succeded {0};
-    //std::atomic_int64_t failed {0};
-    //std::atomic_int64_t cancelled {0};
-
-    int64_t executed {0};
-    int64_t succeded {0};
-    int64_t failed {0};
-    int64_t cancelled {0};
+    int64_t executed {0}; //!< number of times of execution, succeded or failed
+    int64_t succeded {0}; //!< number of times that callback has been executed successfully without exception
+    int64_t failed {0}; //!< number of times that callback has been executed with exception thrown
+    int64_t cancelled {0}; //!< number of scheduled tasks have been cancelled
   };
 
   Task(boost::asio::deadline_timer timer, std::function<void()> callback);
-  std::string id() {
-    return id_;
-  }
 
-  Summary summary() {
-    const std::lock_guard<std::mutex> lock(mutex_);
-    return summary_;
-  }
-
-  Summary terminate() {
-    terminated_ = true;
-    timer_.cancel();
-    timer_.wait();
-    int64_t pending = pendingTasks();
-    const std::lock_guard<std::mutex> lock(mutex_);
-    summary_.cancelled += pending;
-    return summary_;
-  }
-
-  virtual int64_t pendingTasks() = 0;
+  std::string id();
+  Summary summary();
+  Summary terminate();
 
  protected:
-  virtual void schedule(const boost::system::error_code &e) = 0;
+  bool invokeCallback(const boost::system::error_code &e); // return true is no aborted
+
+  virtual void run(const boost::system::error_code &e) = 0;
+  virtual int64_t pendingTasks() = 0; // not thread safe
+  virtual void schedule() = 0;
 
   boost::asio::deadline_timer timer_;
   std::function<void()> callback_;
@@ -56,14 +44,18 @@ class Task: boost::noncopyable {
   std::mutex mutex_;
 };
 
+/**
+* @brief TimerTask triggers the task every 'interval_us_' microseconds 'repetitions_' times.
+* If 'repetitions_' is zero, the task will be invoked forever
+*/
 class TimerTask: public Task {
  public:
   TimerTask(boost::asio::deadline_timer timer, std::function<void()> callback, const int64_t &microseconds, const int64_t &repetitions);
 
+ protected:
   int64_t pendingTasks() override;;
-
- private:
-  void schedule(const boost::system::error_code &e) override;
+  void run(const boost::system::error_code &e) override;
+  void schedule() override;
 
   int64_t repetitions_ {0}; // if (repetitions_ < 1) then repeats for ever
   int64_t interval_us_ {0};
@@ -72,17 +64,26 @@ class TimerTask: public Task {
   std::chrono::steady_clock::time_point interval_start_;
 };
 
+/**
+* @brief CalendarTask triggers the task every date-time specified in the 'repetitions_' queue.
+* date-time should be in absolute coordinate: UTC
+*/
 class CalendarTask: public Task {
  public:
-  CalendarTask(boost::asio::deadline_timer timer, std::function<void()> callback, const int64_t &microseconds, const std::vector<boost::posix_time::ptime> &repetitions);
+  CalendarTask(boost::asio::deadline_timer timer, std::function<void()> callback, const std::queue<boost::posix_time::ptime> &repetitions);
 
+ protected:
   int64_t pendingTasks() override;
- private:
-  void schedule(const boost::system::error_code &e) override;
+  void run(const boost::system::error_code &e) override;
+  void schedule() override;
 
-  std::vector<boost::posix_time::ptime> repetitions_;
+  std::queue<boost::posix_time::ptime> repetitions_;
 };
 
+/**
+* @brief TaskScheduler is the interface to schedule tasks: TimerTask or CalendarTask
+*/
+// TODO: how to purgue 'tasks_' map
 // never purgue
 // auto-purgue: clean completed task
 // completion-handler: invoke completion handler and there you can remove the task
@@ -96,8 +97,8 @@ class TaskScheduler {
   TaskScheduler(const int &num_threads);
   ~TaskScheduler();
 
-
-  std::string createTimerTask(const int64_t &milliseconds, std::function<void()> callback, const int64_t &repetitions = 0);
+  std::string createTimerTask(std::function<void()> callback, const int64_t &milliseconds, const int64_t &repetitions = 0);
+  std::string createCalendarTask(std::function<void()> callback, const std::queue<boost::posix_time::ptime> &repetitions); //!< repetitions must be in UTC (Absolut Time)
   Task::Summary terminateTask(const std::string &task_id);
 
   int64_t terminate();
