@@ -5,13 +5,14 @@
 #include <thread>
 
 #include <boost/range/adaptor/reversed.hpp>
+#include <boost/circular_buffer.hpp>
 
 
 #include "gtest/gtest.h"
 
-//#include "TimeSeries.h"
-#include "time_series.hpp"
-#include "dashboard.hpp"
+#include "timeseries/timeseries.hpp"
+#include "timeseries/timeseries_pose.hpp"
+#include "timeseries/dashboard.hpp"
 #include "../include/utils.h"
 
 void printMsg(const std::string &msg) {
@@ -165,7 +166,7 @@ TEST(TimeSeries, interator_newest_first) {
 
 }
 */
-
+/*
 /// Dashboard
 TEST(Dashboard, creation_top_frequency) {
   const size_t MAX_SIZE = 13;
@@ -212,11 +213,132 @@ TEST(Dashboard, newest_value) {
   EXPECT_EQ(0.3f, ts->getBestValue());
 }
 
+
+
+//////
+
+///  TOP FREQUENCY EXAMPLE
+/**
+* @brief TimeSeriesTopFreq
+* Best Value is the most frequently occurring value in the TimeSeries.
+*/
+
+/*
+template <typename T, typename U>
+class TimeSeriesTopFreq : public TimeSeries<T, U> {
+public:
+  TimeSeriesTopFreq(const size_t& max_size) : TimeSeries<T, U>(max_size) {}
+  void clear() override {
+    TimeSeries<U, U>::clear();
+    count_map_.clear();
+  }
+  void updateRemovingOldestValue() override {
+    const unsigned int value = oldestValue();
+    count_map_[value]--;
+  };
+  void updateAddingNewestValue() override {
+    const unsigned int value = newestValue();
+    count_map_[value]++;
+  };
+  U getBestValue() override {
+    best_value_ = 0;
+    std::size_t max_count = 0;
+    for (const auto& pair : count_map_) {
+      if (pair.second > max_count) {
+        max_count = pair.second;
+        best_value_ = pair.first;
+      }
+    }
+    return best_value_;
+  }
+
+private:
+  std::unordered_map<T, U> count_map_;
+};
+
+TEST(Dashboard, top_frequency) {
+  const size_t MAX_SIZE = 13;
+  int NB_SAMPLES = 2370;
+
+  Dashboard dashboard;
+  auto ts = dashboard.registerTimeSeries<unsigned int, unsigned int>("top_ts", std::make_shared<TimeSeriesTopFreq<unsigned int, unsigned int>>(MAX_SIZE));
+
+  EXPECT_EQ(ts->capacity(), MAX_SIZE);
+
+  for (unsigned int i = 1; i <= NB_SAMPLES; ++i) {
+    ts->addSample(i, i);
+    EXPECT_EQ(ts->size(), i < MAX_SIZE ? i : MAX_SIZE);
+  }
+  // repeat last value
+  ts->addSample(NB_SAMPLES, NB_SAMPLES + 1);
+
+  EXPECT_EQ(ts->size(), MAX_SIZE);
+  EXPECT_EQ(ts->size(), ts->capacity());
+
+  Sample<unsigned int> oldest = ts->oldestSample();
+  EXPECT_EQ(oldest.value_, NB_SAMPLES - MAX_SIZE + 2);
+
+  Sample<unsigned int> newest = ts->newestSample();
+  EXPECT_EQ(newest.value_, NB_SAMPLES);
+  EXPECT_EQ(NB_SAMPLES, ts->getBestValue());
+}
+
+///  TOP FREQUENCY BITMASK EXAMPLE
+
+class TimeSeriesTopFreqBitmask : public TimeSeries<unsigned int, unsigned int> {
+public:
+  TimeSeriesTopFreqBitmask(const size_t& max_size, const unsigned int& max_flags = 1) : 
+    TimeSeries<unsigned int, unsigned int>(max_size), max_flags_(max_flags) {}
+  void clear() override {
+    TimeSeries<unsigned int, unsigned int>::clear();
+    count_map_.clear();
+  }
+  void updateRemovingOldestValue() override {
+    const unsigned int value = oldestValue();
+    // remove old value bit mask from the counter map
+    for (unsigned int k = 0; k < MAX_BITS_; ++k) {
+      if ((value & (1 << k)) != 0) {
+        count_map_[k]--;
+      }
+    }
+  }
+  void updateAddingNewestValue() override {
+    const unsigned int value = newestValue();
+    // count the bit position
+    for (unsigned int k = 0; k < MAX_BITS_; ++k) {
+      if ((value & (1 << k)) != 0) {
+        count_map_[k]++;
+      }
+    }
+  }
+  unsigned int getBestValue() override {
+    // compute best_value_
+    best_value_ = 0;
+    using Pair = std::pair<unsigned int, unsigned int>;
+    struct CompareCount {
+      bool operator() (const Pair& l, const Pair& r) const { return r.second > l.second; }
+    };
+    std::priority_queue<Pair, std::vector<Pair>, CompareCount> queue(count_map_.begin(), count_map_.end());
+
+    for (unsigned int i = 0; (i < max_flags_ && !queue.empty()); ++i) {
+      best_value_ |= (1 << queue.top().first);
+      queue.pop();
+    }
+
+    return best_value_;
+  }
+
+private:
+  const unsigned int MAX_BITS_{ 32 };
+  std::unordered_map<unsigned int, unsigned int> count_map_;
+  unsigned int max_flags_;
+};
+
 TEST(Dashboard, bitmask_top_one) {
   const size_t MAX_SIZE = 3;
 
   Dashboard dashboard;
-  auto ts = dashboard.registerTimeSeries<unsigned int, unsigned int>("key1", MAX_SIZE, std::make_unique<TopFrequencyBitmask>(1));
+  auto ts = dashboard.registerTimeSeries<unsigned int, unsigned int>("bitmask_top_one", std::make_shared<TimeSeriesTopFreqBitmask>(MAX_SIZE, 1));
 
   EXPECT_EQ(ts->capacity(), MAX_SIZE);
 
@@ -231,7 +353,7 @@ TEST(Dashboard, bitmask_top_two) {
   const size_t MAX_SIZE = 6;
 
   Dashboard dashboard;
-  auto ts = dashboard.registerTimeSeries<unsigned int, unsigned int>("key1", MAX_SIZE, std::make_unique<TopFrequencyBitmask>(2));
+  auto ts = dashboard.registerTimeSeries<unsigned int, unsigned int>("bitmask_top_one", std::make_shared<TimeSeriesTopFreqBitmask>(MAX_SIZE, 2));
 
   EXPECT_EQ(ts->capacity(), MAX_SIZE);
 
@@ -242,62 +364,45 @@ TEST(Dashboard, bitmask_top_two) {
   ts->addSample(0x00000001 << 0, 5);
   ts->addSample(0x00000001 << 1, 6);
 
-  EXPECT_EQ((0x00000001 << 5) | (0x00000001 << 3), ts->getBestValue());
+  EXPECT_EQ((0x00000001 << 5) | (0x00000001 << 3), ts->getBestValue()make_shared
 }
-
+*/
 
 ///  POSE TIMESERIE EXAMPLE
-class PoseAlgorithm : public BestAlgorithm<Pose, Pose> {
-public:
-  void clear() override {}
-  void removeOldValue(const Pose& value) override {
-  }
-  void addNewValue(const Pose& value) override { 
-    // update aggression confidence
-    agrression_confidence_ += 0.1f;
-
-    // update aggression confidence
-    trip_and_fall_confidence_ += 0.2f;
-  }
-  Pose getBestValue() const override {
-    return best_value_;
-  }
-  float getAgressionConfidence() {
-    return agrression_confidence_;
-  }
-  float getTripAndFallConfidence() {
-    return trip_and_fall_confidence_;
-  }
-
-  float agrression_confidence_{ 0.f };
-  float trip_and_fall_confidence_{ 0.f };
-  Pose best_value_;
-};
-
 TEST(Dashboard, POSE) {
-  const size_t MAX_SIZE = 3;
 
   Dashboard dashboard;
-  auto ts = dashboard.registerTimeSeries<Pose, Pose>("pose_ts", MAX_SIZE, std::make_unique<PoseAlgorithm>());
 
-  EXPECT_EQ(ts->capacity(), MAX_SIZE);
+  dashboard.addSample(1, Pose());
+  dashboard.addSample(2, Pose());
+  dashboard.addSample(3, Pose());
 
-  ts->addSample(Pose(), 1);
-  ts->addSample(Pose(), 2);
-  ts->addSample(Pose(), 3);
+  std::shared_ptr<TimeSeriesPose> ts_pose = dashboard.getTimeSeries<TimeSeriesPose>();
+  EXPECT_EQ(0.3f, ts_pose->getAgressionConfidence());
+  EXPECT_EQ(0.6f, ts_pose->getTripAndFallConfidence());
 
-  PoseAlgorithm* pose_algo = dynamic_cast<PoseAlgorithm*>(ts->getBestValueAlgorithm());
-
-
-
-  EXPECT_EQ(0.3f, pose_algo->getAgressionConfidence());
-  EXPECT_EQ(0.6f, pose_algo->getTripAndFallConfidence());
 }
+/////
+TEST(Dashboard, COLOUR) {
 
-//////
+  Dashboard dashboard;
 
+  dashboard.addSample(1, Colour(0x00000001 << 1));
+  dashboard.addSample(2, Colour(0x00000001 << 2));
+  dashboard.addSample(3, Colour(0x00000001 << 2));
 
+  dashboard.addSample(1, ColourTop(0x00000001 << 2));
+  dashboard.addSample(2, ColourTop(0x00000001 << 5));
+  dashboard.addSample(3, ColourTop(0x00000001 << 5));
+  dashboard.addSample(4, ColourTop(0x00000001 << 3));
+  dashboard.addSample(5, ColourTop(0x00000001 << 2));
 
+  EXPECT_EQ(0x00000001 << 2, dashboard.getTimeSeries<TimeSeriesColour>()->getBestValue().colour_);
+  EXPECT_EQ((0x00000001 << 2) | (0x00000001 << 5), dashboard.getTimeSeries<TimeSeriesColourTop>()->getBestValue().colour_);
+
+  //there is no ColoutTop data
+  EXPECT_THROW(dashboard.newestValue<ColourBottom>(), std::logic_error);
+}
 
 //TEST(TimeSeries, average_integer) {
 //  TimeSeries<int> timeseries(MAX_SIZE);
@@ -344,4 +449,6 @@ int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   //::testing::GTEST_FLAG(filter) = "TaskScheduler.many_calendar_tasks";
   return RUN_ALL_TESTS();
+
+  return 0;
 }

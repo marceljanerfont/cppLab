@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <queue>
 #include <functional>
 #include <boost/circular_buffer.hpp>
 
@@ -17,16 +18,20 @@ struct Sample {
   uint64_t timestamp_;
 };
 
+
 /**
 * @brief TimeSeries it's a circular buffer of Samples
 * THIS CLASS IS NOT THREAD SAFE!
 */
-template <typename T, std::size_t SIZE>
+template <typename T>
 class TimeSeries {
 public:
-  TimeSeries() {}
 
-  void clear() {
+  TimeSeries(const size_t& max_size) : samples_(max_size) {
+    std::cout << "TimeSeries\n";
+  }
+
+  virtual void clear() {
     samples_.clear();
   }
 
@@ -41,13 +46,22 @@ public:
   std::size_t capacity() const {
     return samples_.capacity();
   }
-
-  void addSample(const Sample<T>& sample) {
-    samples_.push_back(sample);
-  }
+  /////////////
+  virtual void updateRemovingOldestValue() = 0;
+  virtual void updateAddingNewestValue() = 0;
+  /////////////
 
   void addSample(const T& value, const uint64_t& timestamp) {
+    // Algorithm takes into account the oldest sample being removed
+    if (samples_.full()) {
+      updateRemovingOldestValue();
+    }
+
+    // add new value into Time Series
     samples_.push_back(Sample<T>(value, timestamp));
+
+    // Algorithm takes into account the new added value
+    updateAddingNewestValue();
   }
 
   // the oldest sample
@@ -57,6 +71,12 @@ public:
     }
     return samples_.front();
   }
+  const T oldestValue() const {
+    if (samples_.empty()) {
+      throw std::out_of_range("Out of range");
+    }
+    return samples_.front().value_;
+  }
 
   // the newest sample
   const Sample<T> newestSample() const {
@@ -64,6 +84,12 @@ public:
       throw std::out_of_range("Out of range");
     }
     return samples_.back();
+  }
+  const T newestValue() const {
+    if (samples_.empty()) {
+      throw std::out_of_range("Out of range");
+    }
+    return samples_.back().value_;
   }
 
   // postition zero is the oldest
@@ -86,6 +112,25 @@ public:
     return values;
   }
 
-private:
-  boost::circular_buffer<Sample<T>> samples_{ SIZE };
+  //using ValueType = T;
+
+protected:
+  boost::circular_buffer<Sample<T>> samples_;
+};
+
+
+template <typename T>
+class TimeSeries2 {
+public:
+  TimeSeries2(const size_t& max_size)/* : samples_(max_size)*/ {
+    samples_.resize(max_size);
+    std::cout << "TimeSeries\n";
+  }
+
+  int i;
+  float f;
+  T t;
+
+protected:
+  boost::circular_buffer<Sample<T>> samples_;
 };
