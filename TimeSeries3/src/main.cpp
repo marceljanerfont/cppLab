@@ -10,9 +10,8 @@
 
 #include "gtest/gtest.h"
 
-#include "timeseries/timeseries.hpp"
-#include "timeseries/timeseries_pose.hpp"
-#include "timeseries/dashboard.hpp"
+#include "timeseries/attribute_timeseries.hpp"
+#include "timeseries/timeseries_attr_human.hpp"
 #include "../include/utils.h"
 
 void printMsg(const std::string &msg) {
@@ -21,51 +20,68 @@ void printMsg(const std::string &msg) {
 
 
 ///  POSE TIMESERIE EXAMPLE
-TEST(Dashboard, POSE) {
+TEST(Attributes, attributes) {
 
-  Dashboard dashboard;
+  AttributeTimeSeries attr;
 
-  dashboard.addSample<TsPose>(1, Pose());
-  dashboard.addSample<TsPose>(2, Pose());
-  dashboard.addSample<TsPose>(3, Pose());
+  //attr.pushValue(1, Pose());
+  //attr.pushValue(2, Pose());
+  //attr.pushValue(3, Pose());
 
-  std::shared_ptr<TsPose> ts_pose = dashboard.getTimeSeries<TsPose>();
-  EXPECT_EQ(0.3f, ts_pose->getAgressionConfidence());
-  EXPECT_EQ(0.6f, ts_pose->getTripAndFallConfidence());
+  //EXPECT_EQ(0.3f, attr.timeSeriesOf<Pose>()->getAgressionConfidence());
+  //EXPECT_EQ(0.6f, attr.timeSeriesOf<Pose>()->getTripAndFallConfidence());
+
+  attr.timeSeriesOf<Age>()->setThresholds(0.9f, 1.5f);
+
+  attr.pushValue(1, Age(Age::Adult, 0.3f));
+  attr.pushValue(2, Age(Age::Child, 0.4f));
+  attr.pushValue(3, Age(Age::Child, 0.8f));
+  attr.pushValue(4, Age(Age::Adult, 0.2f));
+  attr.pushValue(4, Age(Age::Child, 0.4f));
+  attr.pushValue(5, Age(Age::Adult, 0.9f));
+
+  EXPECT_EQ(Age::Child, attr.timeSeriesOf<Age>()->best_value_.value_);
+  //EXPECT_EQ(0.8f, attr.timeSeriesOf<Age>()->best_value_.confidence_);
 
 }
+/*
 /////
 TEST(Dashboard, COLOUR) {
 
   Dashboard dashboard;
 
-  dashboard.addSample<TsColour>(1, (0x00000001 << 1));
-  dashboard.addSample<TsColourTop>(1, (0x00000001 << 2));
+  dashboard.addSample<TsColour>(1, Colour(0x00000001 << 1));
+  dashboard.addSample<TsColour>(2, Colour(0x00000001 << 2));
+  dashboard.addSample<TsColour>(3, Colour(0x00000001 << 2));
 
-  dashboard.addSample<TsColour>(2, (0x00000001 << 2));
-  dashboard.addSample<TsColourTop>(2, (0x00000001 << 5));
+  dashboard.addSample<TsColourTop>(1, Colour(0x00000001 << 2));
+  dashboard.addSample<TsColourTop>(2, Colour(0x00000001 << 5));
+  dashboard.addSample<TsColourTop>(3, Colour(0x00000001 << 5));
+  dashboard.addSample<TsColourTop>(4, Colour(0x00000001 << 3));
+  dashboard.addSample<TsColourTop>(5, Colour(0x00000001 << 2));
 
-  dashboard.addSample<TsColour>(3, (0x00000001 << 2));
-  dashboard.addSample<TsColourTop>(3, (0x00000001 << 5));
+  EXPECT_EQ((0x00000001 << 1), dashboard.oldestValue<TsColour>().colour_);
+  EXPECT_EQ((0x00000001 << 2), dashboard.newestValue<TsColour>().colour_);
+  EXPECT_EQ(0x00000001 << 2, dashboard.getBestValue<TsColour>().colour_);
+  EXPECT_EQ((0x00000001 << 2) | (0x00000001 << 5), dashboard.getBestValue<TsColourTop>().colour_);
 
-  dashboard.addSample<TsColourTop>(4, (0x00000001 << 3));
-
-  dashboard.addSample<TsColourTop>(5, (0x00000001 << 2));
-
-  EXPECT_EQ((0x00000001 << 1), dashboard.oldestValue<TsColour>());
-  EXPECT_EQ((0x00000001 << 2), dashboard.newestValue<TsColour>());
-  EXPECT_EQ(0x00000001 << 2, dashboard.getBestValue<TsColour>());
-  EXPECT_EQ((0x00000001 << 2) | (0x00000001 << 5), dashboard.getBestValue<TsColourTop>());
-
-  //there is no ColoutTop data
+  //there is no TsColourBottom data
   EXPECT_THROW(dashboard.newestValue<TsColourBottom>(), std::logic_error);
 }
+
+TEST(Dashboard, ASSOCIATED_OBJECT) {
+
+}
+
+
 
 TEST(Dashboard, HUMAN_FACE_ATTRIBUTES) {
   Dashboard dashboard;
 
+  std::vector<float> human_attr_det(42, 0.1f);
+  human_attr_det[3] = 0.8f; // female
 
-  dashboard.addSample<TsHumanAttr>(1, std::vector<float>(42, 0.1f));
+  dashboard.addSample<TsHumanAttr>(1, human_attr_det);
   dashboard.addSample<TsFaceAttr>(1, std::vector<float>(18, 0.2f));
 
   dashboard.addSample<TsHumanAttr>(2, std::vector<float>(42, 0.9f));
@@ -75,8 +91,13 @@ TEST(Dashboard, HUMAN_FACE_ATTRIBUTES) {
   float humman_face_0 = dashboard.getBestValue<TsFaceAttr>()[0];
 
   EXPECT_EQ(1.f, humman_attr_0);
-  EXPECT_EQ(1.f, humman_face_0);}
+  EXPECT_EQ(1.f, humman_face_0);
 
+  Gender gender = dashboard.getTimeSeries<TsHumanAttr>()->gender_;
+  EXPECT_EQ(Gender::Female, gender);
+
+}
+*/
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);

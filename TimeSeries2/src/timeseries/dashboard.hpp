@@ -7,6 +7,7 @@
 #include "timeseries_pose.hpp"
 #include "timeseries_colour.hpp"
 
+
 class Dashboard {
 public:
   Dashboard() {
@@ -43,6 +44,14 @@ public:
     return std::static_pointer_cast<U>(it->second);
   }
 
+  template <typename U>
+  void registerTimeSeries() {
+    auto timeseries = std::make_shared<U>();
+    using T = typename std::remove_reference<decltype(*timeseries)>::type::ValueType;
+    value_type_ts_map_[typeid(T)] = timeseries;
+    ts_type_ts_map_[typeid(U)] = timeseries;
+  }
+
 private:
   template <typename T> 
   std::shared_ptr<TimeSeries<T>> getTimeSerieBase() const {
@@ -56,13 +65,6 @@ private:
   }
 
 
-  template <typename U>
-  void registerTimeSeries() {
-    auto timeseries = std::make_shared<U>();
-    using T = typename std::remove_reference<decltype(*timeseries)>::type::ValueType;
-    value_type_ts_map_[typeid(T)] = timeseries;
-    ts_type_ts_map_[typeid(U)] = timeseries;
-  }
 
   std::unordered_map<std::type_index, std::shared_ptr<void>> value_type_ts_map_;
   std::unordered_map<std::type_index, std::shared_ptr<void>> ts_type_ts_map_;

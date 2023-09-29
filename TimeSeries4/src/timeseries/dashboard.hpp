@@ -7,11 +7,13 @@
 #include "timeseries_pose.hpp"
 #include "timeseries_colour.hpp"
 #include "timeseries_attr.hpp"
+#include "timeseries_attr_human.hpp"
+#include "timeseries_attr_face.hpp"
 
 class Dashboard {
 public:
   Dashboard() {
-    // Register all TimeSeries here!!!
+    // Register all TimeSeries here!
     registerTimeSeries<TsPose>();
     registerTimeSeries<TsColour>();
     registerTimeSeries<TsColourTop>();

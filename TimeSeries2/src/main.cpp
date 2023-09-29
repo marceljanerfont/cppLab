@@ -404,6 +404,24 @@ TEST(Dashboard, COLOUR) {
   EXPECT_THROW(dashboard.newestValue<ColourBottom>(), std::logic_error);
 }
 
+class Bag {};
+class Bags : public std::vector<Bag> {};
+class TsBags : public TimeSeries<Bags> {};
+
+class AssociatedObj {};
+class TsAssociatedObj: public TimeSeries<std::vector<AssociatedObj>>
+
+TEST(Dashboard, ASSOCIATED) {
+
+  Dashboard d;
+  d.registerTimeSeries<TsBags>();
+  d.addSample(1, TsBags());
+}
+
+std::vector<void*>  samples_;
+std::vector<std::type_index>  types_;
+
+
 //TEST(TimeSeries, average_integer) {
 //  TimeSeries<int> timeseries(MAX_SIZE);
 //  

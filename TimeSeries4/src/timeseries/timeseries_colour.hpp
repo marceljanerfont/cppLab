@@ -2,36 +2,38 @@
 
 #include "timeseries.hpp"
 
-///// shared code: TsTopFrequencyBitmask
-class TsTopFrequencyBitmask:
-  public TimeSeries<unsigned int> {
-public:
-  TsTopFrequencyBitmask(const unsigned int& max_size, const unsigned int& max_flags): 
-    TimeSeries<unsigned int>(max_size), max_flags_(max_flags) {}
-  
-  void clear() override {
-    TimeSeries::clear();
-    count_map_.clear();
-  }
+struct Colour {
+  Colour(unsigned int colour) : colour_(colour) {}
+  unsigned int colour_;
+};
+////////////////////////////////////////
 
-  void updateRemovingOldestValue(const unsigned int& old_value) override {
+//TopFrequencyBitmask
+class TsColourBase :
+  public TimeSeries<Colour> {
+public:
+  TsColourBase(const std::size_t& max_size, const unsigned int& max_flags):
+    TimeSeries<Colour>(max_size), max_flags_(max_flags) {}
+
+  void updateRemovingOldestValue(const Colour& old_value) override {
     // remove old value bit mask from the counter map
     for (unsigned int k = 0; k < MAX_BITS_; ++k) {
-      if ((old_value & (1 << k)) != 0) {
+      if ((old_value.colour_ & (1 << k)) != 0) {
         count_map_[k]--;
       }
     }
   }
 
-  void updateAddingNewestValue(const unsigned int& new_value) override {
+  void updateAddingNewestValue(const Colour& new_value) override {
     // count the bit position
     for (unsigned int k = 0; k < MAX_BITS_; ++k) {
-      if ((new_value & (1 << k)) != 0) {
+      if ((new_value.colour_ & (1 << k)) != 0) {
         count_map_[k]++;
       }
     }
   }
-  unsigned int getBestValue() const override {
+
+  Colour getBestValue() {
     // compute best_value_
     unsigned int best_value = 0;
     using Pair = std::pair<unsigned int, unsigned int>;
@@ -45,40 +47,32 @@ public:
       queue.pop();
     }
 
-    return best_value;
+    return Colour(best_value);
   }
-
 private:
-  unsigned int max_flags_{ 1 };
   const unsigned int MAX_BITS_{ 32 };
+  unsigned int max_flags_{ 1 };
   std::unordered_map<unsigned int, unsigned int> count_map_;
 };
-////////////////////////////////////////
 
-class TsColour : 
-  public TsTopFrequencyBitmask {
+
+class TsColour : public TsColourBase {
 public:
   static const unsigned int MAX_SIZE = 10;
   static const unsigned int MAX_COLOURS = 1;
-  TsColour() : TsTopFrequencyBitmask(MAX_SIZE, MAX_COLOURS) {}
+  TsColour() : TsColourBase(MAX_SIZE, MAX_COLOURS) {}
 };
-////////////////////////////////////////
 
-class TsColourTop :
-  public TsTopFrequencyBitmask {
+class TsColourTop : public TsColourBase {
 public:
   static const unsigned int MAX_SIZE = 10;
   static const unsigned int MAX_COLOURS = 2;
-  TsColourTop() : TsTopFrequencyBitmask(MAX_SIZE, MAX_COLOURS) {}
+  TsColourTop() : TsColourBase(MAX_SIZE, MAX_COLOURS) {}
 };
 
-////////////////////////////////////////
-
-class TsColourBottom :
-  public TsTopFrequencyBitmask {
+class TsColourBottom : public TsColourBase {
 public:
   static const unsigned int MAX_SIZE = 10;
   static const unsigned int MAX_COLOURS = 2;
-  TsColourBottom() : TsTopFrequencyBitmask(MAX_SIZE, MAX_COLOURS) {}
+  TsColourBottom() : TsColourBase(MAX_SIZE, MAX_COLOURS) {}
 };
-

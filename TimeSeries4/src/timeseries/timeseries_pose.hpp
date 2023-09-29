@@ -1,6 +1,6 @@
 #pragma once
 
-#include "timeseries/timeseries.hpp"
+#include "timeseries.hpp"
 
 
 /////////////// POSE stuff
@@ -9,15 +9,9 @@ struct Joint {
   int y_;
 };
 
-class TsPose;
-
-class Pose {
-public:
-  using TimeSeriesType = TsPose;
-
+struct Pose {
   static const unsigned int JOINT_TOTAL{ 14 };
   Joint joints_[JOINT_TOTAL];
-
 };
 
 
@@ -27,7 +21,9 @@ public:
   
   TsPose() : TimeSeries<Pose>(MAX_SIZE) {}
   
-  void updateStatistics() override {
+  void updateRemovingOldestValue(const Pose& old_value) override {}
+  
+  void updateAddingNewestValue(const Pose& new_value) override {
     // update aggression confidence
     agrression_confidence_ += 0.1f;
 
